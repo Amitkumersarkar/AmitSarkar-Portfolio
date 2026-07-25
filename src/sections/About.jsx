@@ -14,7 +14,7 @@ const highlights = [
     },
     {
         icon: FiLayers,
-        value: "Full-stack",
+        value: "Full-Stack",
         label: "Development",
     },
     {
@@ -194,8 +194,8 @@ const About = () => {
                                 sm:leading-8
                             "
                         >
-                            I'm Amit Sarkar, a full-stack
-                            developer focused on building
+                            I'm Amit Sarkar, a Full-Stack
+                            Developer focused on building
                             modern web applications with
                             thoughtful interfaces and
                             reliable backend systems.
@@ -214,8 +214,8 @@ const About = () => {
                             I enjoy turning complex ideas
                             into simple, responsive and
                             scalable experiences using
-                            React, JavaScript and the MERN
-                            stack.
+                            React, MERN and the PERN
+                            Stack.
                         </p>
 
                         <motion.a
