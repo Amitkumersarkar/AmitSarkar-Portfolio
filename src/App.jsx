@@ -1,6 +1,12 @@
 import Navbar from "./components/Navbar";
 import DynamicBackground from "./components/DynamicBackground";
+
 import Hero from "./sections/Hero";
+import About from "./sections/About";
+import SelectedWork from "./sections/SelectedWork";
+import Skills from "./sections/Skills";
+import Experience from "./sections/Experience";
+import Contact from "./sections/Contact";
 
 function App() {
   return (
@@ -14,6 +20,11 @@ function App() {
 
         <main>
           <Hero />
+          <About />
+          <SelectedWork />
+          <Skills />
+          <Experience />
+          <Contact />
         </main>
       </div>
     </div>
