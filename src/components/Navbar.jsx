@@ -39,8 +39,8 @@ const Navbar = () => {
             >
                 <nav
                     className={`mx-auto flex max-w-7xl items-center justify-between rounded-full px-5 py-3 transition-all duration-500 ${scrolled
-                            ? "border border-black/10 bg-white/70 shadow-sm backdrop-blur-xl"
-                            : "bg-transparent"
+                        ? "border border-black/10 bg-white/70 shadow-sm backdrop-blur-xl"
+                        : "bg-transparent"
                         }`}
                 >
                     <a
@@ -64,10 +64,14 @@ const Navbar = () => {
 
                         <a
                             href="#contact"
-                            className="flex items-center gap-1 rounded-full bg-black px-4 py-2 text-sm text-white transition-transform duration-300 hover:scale-105"
+                            className="group flex items-center gap-1.5 rounded-full bg-black px-4 py-2 text-sm !text-white transition-all duration-300 hover:scale-105"
                         >
                             Let's Talk
-                            <FiArrowUpRight size={15} />
+
+                            <FiArrowUpRight
+                                size={15}
+                                className="!text-white transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                            />
                         </a>
                     </div>
 
