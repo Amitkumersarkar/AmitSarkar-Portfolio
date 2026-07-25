@@ -1,11 +1,22 @@
-import { motion } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { FiArrowDown, FiArrowUpRight } from "react-icons/fi";
 import InteractiveTech from "../components/InteractiveTech";
-import {
-    FiArrowDown,
-    FiArrowUpRight,
-} from "react-icons/fi";
 
 const Hero = () => {
+    const { scrollY } = useScroll();
+
+    const backgroundY = useTransform(
+        scrollY,
+        [0, 700],
+        [0, 120]
+    );
+
+    const techY = useTransform(
+        scrollY,
+        [0, 700],
+        [0, -45]
+    );
+
     return (
         <section
             id="home"
@@ -14,12 +25,100 @@ const Hero = () => {
                 min-h-screen
                 overflow-hidden
                 px-5
-                pb-8
+                pb-6
                 pt-28
+                sm:px-6
                 md:px-10
                 md:pt-32
+                lg:pb-8
             "
         >
+            {/* =========================================
+                SUBTLE HERO GRID
+            ========================================== */}
+
+            <motion.div
+                style={{ y: backgroundY }}
+                className="
+                    pointer-events-none
+                    absolute
+                    inset-0
+                    -z-10
+                    opacity-[0.035]
+                    dark:opacity-[0.025]
+                "
+            >
+                <div
+                    className="
+                        absolute
+                        inset-0
+                        bg-[linear-gradient(to_right,var(--foreground)_1px,transparent_1px),linear-gradient(to_bottom,var(--foreground)_1px,transparent_1px)]
+                        bg-[size:80px_80px]
+                        [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_75%)]
+                    "
+                />
+            </motion.div>
+
+            {/* =========================================
+                PURPLE AMBIENT GLOW
+            ========================================== */}
+
+            <motion.div
+                animate={{
+                    x: [0, 25, 0],
+                    y: [0, -20, 0],
+                    scale: [1, 1.08, 1],
+                }}
+                transition={{
+                    duration: 10,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                }}
+                className="
+                    pointer-events-none
+                    absolute
+                    -right-40
+                    top-[18%]
+                    -z-10
+                    h-[420px]
+                    w-[420px]
+                    rounded-full
+                    bg-accent/10
+                    blur-[130px]
+                    sm:h-[520px]
+                    sm:w-[520px]
+                    lg:h-[650px]
+                    lg:w-[650px]
+                "
+            />
+
+            <motion.div
+                animate={{
+                    x: [0, -20, 0],
+                    y: [0, 25, 0],
+                    scale: [1, 1.05, 1],
+                }}
+                transition={{
+                    duration: 13,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                }}
+                className="
+                    pointer-events-none
+                    absolute
+                    -left-40
+                    bottom-[5%]
+                    -z-10
+                    h-[350px]
+                    w-[350px]
+                    rounded-full
+                    bg-accent-secondary/5
+                    blur-[120px]
+                    sm:h-[450px]
+                    sm:w-[450px]
+                "
+            />
+
             <div
                 className="
                     mx-auto
@@ -29,9 +128,9 @@ const Hero = () => {
                     flex-col
                 "
             >
-                {/* =====================================
+                {/* =========================================
                     TOP META
-                ====================================== */}
+                ========================================== */}
 
                 <motion.div
                     initial={{
@@ -44,6 +143,7 @@ const Hero = () => {
                     }}
                     transition={{
                         duration: 0.7,
+                        ease: "easeOut",
                     }}
                     className="
                         flex
@@ -52,6 +152,8 @@ const Hero = () => {
                     "
                 >
                     <div className="flex items-center gap-3">
+                        {/* Availability indicator */}
+
                         <span className="relative flex h-2.5 w-2.5">
                             <span
                                 className="
@@ -72,18 +174,21 @@ const Hero = () => {
                                     w-2.5
                                     rounded-full
                                     bg-emerald-500
+                                    shadow-[0_0_12px_rgba(16,185,129,0.5)]
                                 "
                             />
                         </span>
 
                         <span
                             className="
-                                text-[10px]
+                                text-[9px]
                                 font-semibold
                                 uppercase
-                                tracking-[0.2em]
+                                tracking-[0.18em]
                                 text-muted
-                                sm:text-xs
+                                sm:text-[10px]
+                                md:text-xs
+                                md:tracking-[0.2em]
                             "
                         >
                             Available for opportunities
@@ -94,6 +199,7 @@ const Hero = () => {
                         className="
                             hidden
                             text-xs
+                            font-medium
                             text-muted
                             md:block
                         "
@@ -102,9 +208,9 @@ const Hero = () => {
                     </span>
                 </motion.div>
 
-                {/* =====================================
-                    HERO AREA
-                ====================================== */}
+                {/* =========================================
+                    HERO CONTENT
+                ========================================== */}
 
                 <div
                     className="
@@ -114,10 +220,13 @@ const Hero = () => {
                         flex-col
                         justify-center
                         py-14
+                        sm:py-16
                         lg:py-10
                     "
                 >
-                    {/* Left side */}
+                    {/* =====================================
+                        LEFT CONTENT
+                    ====================================== */}
 
                     <div
                         className="
@@ -147,35 +256,42 @@ const Hero = () => {
                                 flex
                                 items-center
                                 gap-3
+                                sm:mb-7
                             "
                         >
                             <span
                                 className="
                                     h-px
-                                    w-8
-                                    bg-foreground/30
+                                    w-7
+                                    bg-accent
+                                    sm:w-9
                                 "
                             />
 
                             <span
                                 className="
-                                    text-xs
-                                    font-medium
+                                    text-[9px]
+                                    font-semibold
                                     uppercase
-                                    tracking-[0.2em]
+                                    tracking-[0.18em]
                                     text-muted
+                                    sm:text-[10px]
+                                    md:text-xs
+                                    md:tracking-[0.2em]
                                 "
                             >
                                 Frontend / MERN Developer
                             </span>
                         </motion.div>
 
-                        {/* Main heading */}
+                        {/* =================================
+                            MAIN TITLE
+                        ================================== */}
 
                         <div className="overflow-hidden">
                             <motion.h1
                                 initial={{
-                                    y: "100%",
+                                    y: "105%",
                                     opacity: 0,
                                 }}
                                 animate={{
@@ -193,10 +309,12 @@ const Hero = () => {
                                     ],
                                 }}
                                 className="
-                                    text-[clamp(4rem,10vw,9.5rem)]
+                                    whitespace-nowrap
+                                    text-[clamp(3rem,12vw,9.5rem)]
                                     font-semibold
-                                    leading-[0.8]
-                                    tracking-[-0.09em]
+                                    leading-[0.82]
+                                    tracking-[-0.085em]
+                                    sm:text-[clamp(4rem,10vw,9.5rem)]
                                 "
                             >
                                 I BUILD
@@ -206,7 +324,7 @@ const Hero = () => {
                         <div className="overflow-hidden">
                             <motion.h1
                                 initial={{
-                                    y: "100%",
+                                    y: "105%",
                                     opacity: 0,
                                 }}
                                 animate={{
@@ -224,17 +342,20 @@ const Hero = () => {
                                     ],
                                 }}
                                 className="
-                                    ml-[7vw]
+                                    ml-[5vw]
+                                    whitespace-nowrap
                                     bg-gradient-to-r
                                     from-foreground
-                                    via-foreground/70
+                                    via-foreground/80
                                     to-accent
                                     bg-clip-text
-                                    text-[clamp(4rem,10vw,9.5rem)]
+                                    text-[clamp(3rem,12vw,9.5rem)]
                                     font-semibold
-                                    leading-[0.8]
-                                    tracking-[-0.09em]
+                                    leading-[0.82]
+                                    tracking-[-0.085em]
                                     text-transparent
+                                    sm:ml-[7vw]
+                                    sm:text-[clamp(4rem,10vw,9.5rem)]
                                 "
                             >
                                 DIGITAL
@@ -244,7 +365,7 @@ const Hero = () => {
                         <div className="overflow-hidden">
                             <motion.h1
                                 initial={{
-                                    y: "100%",
+                                    y: "105%",
                                     opacity: 0,
                                 }}
                                 animate={{
@@ -262,10 +383,12 @@ const Hero = () => {
                                     ],
                                 }}
                                 className="
-                                    text-[clamp(4rem,10vw,9.5rem)]
+                                    whitespace-nowrap
+                                    text-[clamp(3rem,12vw,9.5rem)]
                                     font-semibold
-                                    leading-[0.8]
-                                    tracking-[-0.09em]
+                                    leading-[0.82]
+                                    tracking-[-0.085em]
+                                    sm:text-[clamp(4rem,10vw,9.5rem)]
                                 "
                             >
                                 EXPERIENCES
@@ -275,7 +398,9 @@ const Hero = () => {
                             </motion.h1>
                         </div>
 
-                        {/* Name */}
+                        {/* =================================
+                            NAME
+                        ================================== */}
 
                         <motion.div
                             initial={{
@@ -291,32 +416,49 @@ const Hero = () => {
                                 delay: 0.7,
                             }}
                             className="
-                                mt-10
+                                mt-8
                                 flex
                                 items-center
                                 gap-4
+                                sm:mt-10
                             "
                         >
                             <div
                                 className="
                                     h-px
-                                    w-10
-                                    bg-border
+                                    w-8
+                                    bg-accent/60
+                                    sm:w-10
                                 "
                             />
 
                             <div>
-                                <p className="text-sm font-semibold">
+                                <p
+                                    className="
+                                        text-sm
+                                        font-semibold
+                                        tracking-[-0.02em]
+                                    "
+                                >
                                     Amit Sarkar
                                 </p>
 
-                                <p className="mt-1 text-xs text-muted">
+                                <p
+                                    className="
+                                        mt-1
+                                        text-[11px]
+                                        text-muted
+                                        sm:text-xs
+                                    "
+                                >
                                     Full-stack developer
                                 </p>
                             </div>
                         </motion.div>
 
-                        {/* Description */}
+                        {/* =================================
+                            DESCRIPTION
+                        ================================== */}
 
                         <motion.div
                             initial={{
@@ -332,8 +474,9 @@ const Hero = () => {
                                 delay: 0.8,
                             }}
                             className="
-                                mt-8
+                                mt-7
                                 max-w-md
+                                sm:mt-8
                             "
                         >
                             <p
@@ -341,21 +484,23 @@ const Hero = () => {
                                     text-sm
                                     leading-7
                                     text-muted
-                                    md:text-base
+                                    sm:text-base
                                 "
                             >
                                 I create modern, responsive
                                 web experiences using React,
-                                JavaScript and the MERN
-                                stack — combining thoughtful
-                                interfaces with clean,
-                                scalable development.
+                                JavaScript and the MERN stack —
+                                combining thoughtful interfaces
+                                with clean, scalable development.
                             </p>
+
+                            {/* CTA */}
 
                             <motion.a
                                 href="#work"
-                                whileHover={{
-                                    x: 5,
+                                whileHover="hover"
+                                whileTap={{
+                                    scale: 0.97,
                                 }}
                                 className="
                                     group
@@ -363,26 +508,41 @@ const Hero = () => {
                                     inline-flex
                                     items-center
                                     gap-3
-                                    border-b
-                                    border-foreground/30
-                                    pb-2
+                                    rounded-full
+                                    border
+                                    border-accent/30
+                                    bg-accent/5
+                                    px-4
+                                    py-2.5
                                     text-sm
                                     font-semibold
-                                    transition-colors
-                                    hover:border-foreground
+                                    text-accent
+                                    transition-all
+                                    duration-300
+                                    hover:border-accent/50
+                                    hover:bg-accent
+                                    hover:text-white
+                                    hover:shadow-[0_10px_35px_rgba(109,93,252,0.25)]
                                 "
                             >
                                 Explore my work
 
-                                <FiArrowUpRight
-                                    size={15}
-                                    className="
-                                        transition-transform
-                                        duration-300
-                                        group-hover:-translate-y-1
-                                        group-hover:translate-x-1
-                                    "
-                                />
+                                <motion.span
+                                    variants={{
+                                        hover: {
+                                            x: 4,
+                                            y: -4,
+                                            rotate: 5,
+                                        },
+                                    }}
+                                    transition={{
+                                        duration: 0.3,
+                                    }}
+                                >
+                                    <FiArrowUpRight
+                                        size={15}
+                                    />
+                                </motion.span>
                             </motion.a>
                         </motion.div>
                     </div>
@@ -392,9 +552,12 @@ const Hero = () => {
                     ====================================== */}
 
                     <motion.div
+                        style={{
+                            y: techY,
+                        }}
                         initial={{
                             opacity: 0,
-                            scale: 0.9,
+                            scale: 0.92,
                             x: 30,
                         }}
                         animate={{
@@ -414,8 +577,9 @@ const Hero = () => {
                         }}
                         className="
                             relative
-                            mt-14
+                            mt-12
                             w-full
+                            sm:mt-14
                             lg:absolute
                             lg:right-[-3%]
                             lg:top-1/2
@@ -428,9 +592,9 @@ const Hero = () => {
                     </motion.div>
                 </div>
 
-                {/* =====================================
-                    BOTTOM
-                ====================================== */}
+                {/* =========================================
+                    BOTTOM META
+                ========================================== */}
 
                 <motion.div
                     initial={{
@@ -449,16 +613,19 @@ const Hero = () => {
                         justify-between
                         border-t
                         border-border/60
-                        pt-5
+                        pt-4
+                        sm:pt-5
                     "
                 >
                     <span
                         className="
-                            text-[10px]
+                            text-[9px]
                             font-medium
                             uppercase
-                            tracking-[0.2em]
+                            tracking-[0.15em]
                             text-muted
+                            sm:text-[10px]
+                            sm:tracking-[0.2em]
                         "
                     >
                         2026 — Portfolio
@@ -467,17 +634,28 @@ const Hero = () => {
                     <a
                         href="#work"
                         className="
+                            group
                             flex
                             items-center
                             gap-2
-                            text-[10px]
+                            text-[9px]
                             font-medium
                             uppercase
-                            tracking-[0.2em]
+                            tracking-[0.15em]
                             text-muted
+                            transition-colors
+                            hover:text-accent
+                            sm:text-[10px]
+                            sm:tracking-[0.2em]
                         "
                     >
-                        Scroll to explore
+                        <span className="hidden xs:block">
+                            Scroll to explore
+                        </span>
+
+                        <span className="xs:hidden">
+                            Explore
+                        </span>
 
                         <motion.span
                             animate={{
@@ -488,6 +666,9 @@ const Hero = () => {
                                 repeat: Infinity,
                                 ease: "easeInOut",
                             }}
+                            className="
+                                text-accent
+                            "
                         >
                             <FiArrowDown size={13} />
                         </motion.span>
