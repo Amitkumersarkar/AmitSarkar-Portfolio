@@ -280,7 +280,7 @@ const Hero = () => {
                                     md:tracking-[0.2em]
                                 "
                             >
-                                Frontend / MERN Developer
+                                Frontend / MERN / PERN Stack Developer
                             </span>
                         </motion.div>
 
@@ -451,7 +451,7 @@ const Hero = () => {
                                         sm:text-xs
                                     "
                                 >
-                                    Full-stack developer
+                                    Full-Stack Developer
                                 </p>
                             </div>
                         </motion.div>
@@ -487,11 +487,8 @@ const Hero = () => {
                                     sm:text-base
                                 "
                             >
-                                I create modern, responsive
-                                web experiences using React,
-                                JavaScript and the MERN stack —
-                                combining thoughtful interfaces
-                                with clean, scalable development.
+                                I craft modern, responsive web experiences with React.js, Next.js, and the MERN/PERN stack — blending thoughtful design, seamless interactions, and scalable engineering.
+
                             </p>
 
                             {/* CTA */}
