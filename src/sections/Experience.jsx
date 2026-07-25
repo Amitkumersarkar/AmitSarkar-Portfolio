@@ -8,7 +8,7 @@ import {
 
 const experiences = [
     {
-        period: "2025 — Present",
+        period: "2024 — Present",
         type: "Independent",
         title: "Full-Stack Web Development",
         company: "Personal Projects & Development",
