@@ -4,9 +4,11 @@ import Hero from "./sections/Hero";
 
 function App() {
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-x-clip">
+      {/* Background */}
       <DynamicBackground />
 
+      {/* Website */}
       <div className="relative z-10">
         <Navbar />
 
