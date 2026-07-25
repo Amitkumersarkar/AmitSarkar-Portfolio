@@ -115,7 +115,7 @@ const techData = {
         label: "SSLCommerz",
         category: "PAYMENT",
         description:
-            "Integrating online payment experiences for full-stack applications.",
+            "Integrating secure online payment experiences for full-stack applications.",
     },
 };
 
@@ -126,37 +126,43 @@ const techData = {
 const floatingTech = [
     {
         name: "React",
-        className: "left-[2%] top-[14%]",
+        className:
+            "left-[1%] top-[12%] sm:left-[3%] sm:top-[14%] lg:left-[2%]",
         depth: 1.2,
     },
 
     {
         name: "Next.js",
-        className: "right-[3%] top-[8%]",
+        className:
+            "right-[1%] top-[8%] sm:right-[3%] sm:top-[9%] lg:right-[3%]",
         depth: 0.8,
     },
 
     {
         name: "TypeScript",
-        className: "right-[-1%] bottom-[20%]",
+        className:
+            "right-[0%] bottom-[15%] sm:right-[2%] sm:bottom-[19%] lg:right-[-1%]",
         depth: 1.4,
     },
 
     {
         name: "Node.js",
-        className: "left-[3%] bottom-[17%]",
+        className:
+            "left-[1%] bottom-[15%] sm:left-[3%] sm:bottom-[17%] lg:left-[3%]",
         depth: 0.7,
     },
 
     {
         name: "MongoDB",
-        className: "left-[28%] top-[1%]",
+        className:
+            "left-[20%] top-[1%] sm:left-[27%] lg:left-[28%]",
         depth: 1,
     },
 
     {
         name: "PostgreSQL",
-        className: "right-[27%] bottom-[1%]",
+        className:
+            "right-[18%] bottom-[1%] sm:right-[25%] lg:right-[27%]",
         depth: 1.3,
     },
 ];
@@ -168,12 +174,8 @@ const floatingTech = [
 const InteractiveTech = () => {
     const [activeTech, setActiveTech] = useState("React");
 
-    /* Mouse position */
-
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
-
-    /* Smooth movement */
 
     const smoothX = useSpring(mouseX, {
         stiffness: 100,
@@ -184,8 +186,6 @@ const InteractiveTech = () => {
         stiffness: 100,
         damping: 20,
     });
-
-    /* 3D rotation */
 
     const rotateX = useTransform(
         smoothY,
@@ -199,9 +199,9 @@ const InteractiveTech = () => {
         [-7, 7]
     );
 
-    /* Mouse handler */
-
     const handleMouseMove = (event) => {
+        if (window.innerWidth < 768) return;
+
         const rect =
             event.currentTarget.getBoundingClientRect();
 
@@ -220,8 +220,10 @@ const InteractiveTech = () => {
     };
 
     const active = techData[activeTech];
-
     const ActiveIcon = active.icon;
+
+    const techNames = Object.keys(techData);
+    const activeIndex = techNames.indexOf(activeTech);
 
     return (
         <div
@@ -233,16 +235,17 @@ const InteractiveTech = () => {
                 sm:h-[440px]
                 md:h-[500px]
                 lg:h-[530px]
+                [perspective:1200px]
             "
         >
-            {/* =====================================
+            {/* =================================================
                 AMBIENT GLOW
-            ====================================== */}
+            ================================================= */}
 
             <motion.div
                 animate={{
                     scale: [1, 1.12, 1],
-                    opacity: [0.2, 0.35, 0.2],
+                    opacity: [0.18, 0.35, 0.18],
                 }}
                 transition={{
                     duration: 5,
@@ -264,25 +267,52 @@ const InteractiveTech = () => {
                 "
             />
 
-            {/* =====================================
+            {/* Secondary glow */}
+
+            <motion.div
+                animate={{
+                    x: [-20, 20, -20],
+                    y: [10, -10, 10],
+                    opacity: [0.08, 0.18, 0.08],
+                }}
+                transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                }}
+                className="
+                    absolute
+                    left-1/2
+                    top-1/2
+                    h-72
+                    w-72
+                    -translate-x-1/2
+                    -translate-y-1/2
+                    rounded-full
+                    bg-cyan-400/10
+                    blur-[120px]
+                "
+            />
+
+            {/* =================================================
                 3D SCENE
-            ====================================== */}
+            ================================================= */}
 
             <motion.div
                 style={{
                     rotateX,
                     rotateY,
-                    transformStyle:
-                        "preserve-3d",
+                    transformStyle: "preserve-3d",
                 }}
                 className="
                     absolute
                     inset-0
+                    [transform-style:preserve-3d]
                 "
             >
-                {/* =================================
+                {/* =================================================
                     CENTER CARD
-                ================================== */}
+                ================================================= */}
 
                 <motion.div
                     layout
@@ -291,22 +321,25 @@ const InteractiveTech = () => {
                         left-1/2
                         top-1/2
                         z-20
-                        w-[255px]
-                        rounded-[2rem]
+                        w-[245px]
+                        -translate-x-1/2
+                        -translate-y-1/2
+                        rounded-[1.8rem]
                         border
-                        border-border
-                        bg-surface/80
-                        p-6
-                        shadow-2xl
+                        border-border/80
+                        bg-surface/85
+                        p-5
+                        shadow-[0_25px_80px_rgba(0,0,0,0.12)]
                         backdrop-blur-2xl
                         sm:w-[280px]
                         sm:p-7
                         md:w-[310px]
                         md:p-8
+                        dark:shadow-[0_25px_80px_rgba(0,0,0,0.35)]
                     "
                     style={{
                         transform:
-                            "translate(-50%, -50%) translateZ(60px)",
+                            "translate(-50%, -50%) translateZ(70px)",
                     }}
                 >
                     {/* Card header */}
@@ -331,6 +364,7 @@ const InteractiveTech = () => {
                             transition={{
                                 duration: 3,
                                 repeat: Infinity,
+                                ease: "easeInOut",
                             }}
                         >
                             <FiArrowUpRight
@@ -358,10 +392,11 @@ const InteractiveTech = () => {
                             duration: 0.4,
                         }}
                         className="
+                            relative
                             mt-8
                             flex
-                            h-[70px]
-                            w-[70px]
+                            h-[68px]
+                            w-[68px]
                             items-center
                             justify-center
                             rounded-2xl
@@ -372,11 +407,26 @@ const InteractiveTech = () => {
                             text-white
                             shadow-lg
                             shadow-violet-500/20
+                            sm:h-[72px]
+                            sm:w-[72px]
                             md:h-20
                             md:w-20
                         "
                     >
-                        <ActiveIcon size={34} />
+                        <div
+                            className="
+                                absolute
+                                inset-0
+                                rounded-2xl
+                                bg-violet-500/20
+                                blur-xl
+                            "
+                        />
+
+                        <ActiveIcon
+                            size={34}
+                            className="relative z-10"
+                        />
                     </motion.div>
 
                     {/* Dynamic title */}
@@ -434,22 +484,30 @@ const InteractiveTech = () => {
                     {/* Bottom indicator */}
 
                     <div className="mt-6 flex items-center justify-between">
-                        <div className="flex gap-1.5">
-                            {[1, 2, 3, 4].map(
-                                (item) => (
+                        <div className="flex items-center gap-1.5">
+                            {techNames.map(
+                                (tech, index) => (
                                     <motion.span
-                                        key={item}
+                                        key={tech}
                                         animate={{
                                             width:
-                                                item ===
-                                                    1
-                                                    ? 30
+                                                index ===
+                                                    activeIndex
+                                                    ? 22
                                                     : 5,
+                                            opacity:
+                                                index ===
+                                                    activeIndex
+                                                    ? 1
+                                                    : 0.4,
+                                        }}
+                                        transition={{
+                                            duration: 0.25,
                                         }}
                                         className="
                                             h-1
                                             rounded-full
-                                            bg-foreground/20
+                                            bg-violet-500
                                         "
                                     />
                                 )
@@ -465,14 +523,20 @@ const InteractiveTech = () => {
                                 text-muted
                             "
                         >
-                            01 / 11
+                            {String(
+                                activeIndex + 1
+                            ).padStart(2, "0")}{" "}
+                            /{" "}
+                            {String(
+                                techNames.length
+                            ).padStart(2, "0")}
                         </span>
                     </div>
                 </motion.div>
 
-                {/* =================================
-                    FLOATING TECH
-                ================================== */}
+                {/* =================================================
+                    FLOATING TECHNOLOGIES
+                ================================================= */}
 
                 {floatingTech.map(
                     ({
@@ -491,19 +555,13 @@ const InteractiveTech = () => {
                                 key={name}
                                 type="button"
                                 onMouseEnter={() =>
-                                    setActiveTech(
-                                        name
-                                    )
+                                    setActiveTech(name)
                                 }
                                 onClick={() =>
-                                    setActiveTech(
-                                        name
-                                    )
+                                    setActiveTech(name)
                                 }
                                 onFocus={() =>
-                                    setActiveTech(
-                                        name
-                                    )
+                                    setActiveTech(name)
                                 }
                                 whileHover={{
                                     scale: 1.1,
@@ -513,19 +571,13 @@ const InteractiveTech = () => {
                                     scale: 0.95,
                                 }}
                                 animate={{
-                                    y: [
-                                        0,
-                                        -7,
-                                        0,
-                                    ],
+                                    y: [0, -7, 0],
                                 }}
                                 transition={{
                                     y: {
                                         duration:
-                                            3 +
-                                            depth,
-                                        repeat:
-                                            Infinity,
+                                            3 + depth,
+                                        repeat: Infinity,
                                         ease: "easeInOut",
                                     },
                                 }}
@@ -542,10 +594,10 @@ const InteractiveTech = () => {
                                     rounded-full
                                     border
 
-                                    px-3
-                                    py-2
+                                    px-2.5
+                                    py-1.5
 
-                                    text-[10px]
+                                    text-[9px]
                                     font-semibold
 
                                     backdrop-blur-xl
@@ -559,7 +611,7 @@ const InteractiveTech = () => {
 
                                     ${isActive
                                         ? `
-                                                border-violet-400/40
+                                                border-violet-400/50
                                                 bg-violet-500/10
                                                 text-violet-500
                                                 shadow-lg
@@ -567,15 +619,20 @@ const InteractiveTech = () => {
                                                 dark:text-violet-300
                                             `
                                         : `
-                                                border-border
+                                                border-border/80
                                                 bg-surface/60
                                                 text-muted
+                                                hover:border-violet-400/30
                                                 hover:text-foreground
                                             `
                                     }
                                 `}
+                                style={{
+                                    transform: `translateZ(${depth * 35
+                                        }px)`,
+                                }}
                             >
-                                <Icon size={14} />
+                                <Icon size={13} />
 
                                 {name}
                             </motion.button>
@@ -583,21 +640,22 @@ const InteractiveTech = () => {
                     }
                 )}
 
-                {/* =================================
-                    EXTRA STACK INDICATOR
-                ================================== */}
+                {/* =================================================
+                    FULL STACK INDICATOR
+                ================================================= */}
 
                 <motion.div
                     animate={{
-                        opacity: [0.5, 1, 0.5],
+                        opacity: [0.4, 0.9, 0.4],
                     }}
                     transition={{
                         duration: 3,
                         repeat: Infinity,
+                        ease: "easeInOut",
                     }}
                     className="
                         absolute
-                        bottom-[15%]
+                        bottom-[12%]
                         left-1/2
                         z-10
                         hidden
