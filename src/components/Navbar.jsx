@@ -9,11 +9,11 @@ import {
 } from "react-icons/fi";
 
 const navItems = [
-    { label: "Work", href: "#work" },
     { label: "About", href: "#about" },
+    { label: "Work", href: "#work" },
     { label: "Skills", href: "#skills" },
     { label: "Experience", href: "#experience" },
-    { label: "Contact", href: "#contact" },
+    // { label: "Contact", href: "#contact" },
 ];
 
 /* =========================================================
@@ -31,9 +31,7 @@ const getInitialTheme = () => {
         return savedTheme;
     }
 
-    return window.matchMedia(
-        "(prefers-color-scheme: dark)"
-    ).matches
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark"
         : "light";
 };
@@ -49,42 +47,33 @@ const Navbar = () => {
     const [activeSection, setActiveSection] = useState("");
 
     /* =====================================================
-       APPLY THEME
+       THEME
     ===================================================== */
 
     useEffect(() => {
         const root = document.documentElement;
 
-        root.classList.toggle(
-            "dark",
-            theme === "dark"
-        );
-
+        root.classList.toggle("dark", theme === "dark");
         localStorage.setItem("theme", theme);
     }, [theme]);
 
     /* =====================================================
-       SCROLL DETECTION
+       SCROLL
     ===================================================== */
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 24);
+            setScrolled(window.scrollY > 30);
         };
 
         handleScroll();
 
-        window.addEventListener(
-            "scroll",
-            handleScroll,
-            { passive: true }
-        );
+        window.addEventListener("scroll", handleScroll, {
+            passive: true,
+        });
 
         return () => {
-            window.removeEventListener(
-                "scroll",
-                handleScroll
-            );
+            window.removeEventListener("scroll", handleScroll);
         };
     }, []);
 
@@ -93,51 +82,44 @@ const Navbar = () => {
     ===================================================== */
 
     useEffect(() => {
-        const sections = navItems
-            .map((item) =>
-                document.querySelector(item.href)
-            )
-            .filter(Boolean);
+        const handleScroll = () => {
+            const scrollPosition = window.scrollY + 180;
 
-        if (!sections.length) return;
+            let currentSection = "";
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const visibleSections = entries
-                    .filter(
-                        (entry) =>
-                            entry.isIntersecting
-                    )
-                    .sort(
-                        (a, b) =>
-                            b.intersectionRatio -
-                            a.intersectionRatio
-                    );
+            navItems.forEach((item) => {
+                const section = document.querySelector(item.href);
 
-                if (visibleSections[0]) {
-                    setActiveSection(
-                        `#${visibleSections[0].target.id}`
-                    );
+                if (!section) return;
+
+                const sectionTop = section.offsetTop;
+                const sectionBottom =
+                    sectionTop + section.offsetHeight;
+
+                if (
+                    scrollPosition >= sectionTop &&
+                    scrollPosition < sectionBottom
+                ) {
+                    currentSection = item.href;
                 }
-            },
-            {
-                rootMargin:
-                    "-20% 0px -65% 0px",
-                threshold: [0.1, 0.25, 0.5],
-            }
-        );
+            });
 
-        sections.forEach((section) => {
-            observer.observe(section);
+            setActiveSection(currentSection);
+        };
+
+        handleScroll();
+
+        window.addEventListener("scroll", handleScroll, {
+            passive: true,
         });
 
         return () => {
-            observer.disconnect();
+            window.removeEventListener("scroll", handleScroll);
         };
     }, []);
 
     /* =====================================================
-       CLOSE MENU ON ESC
+       ESCAPE
     ===================================================== */
 
     useEffect(() => {
@@ -147,29 +129,19 @@ const Navbar = () => {
             }
         };
 
-        window.addEventListener(
-            "keydown",
-            handleKeyDown
-        );
+        window.addEventListener("keydown", handleKeyDown);
 
         return () => {
-            window.removeEventListener(
-                "keydown",
-                handleKeyDown
-            );
+            window.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
 
     /* =====================================================
-       LOCK BODY WHEN MOBILE MENU IS OPEN
+       BODY LOCK
     ===================================================== */
 
     useEffect(() => {
-        if (menuOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
+        document.body.style.overflow = menuOpen ? "hidden" : "";
 
         return () => {
             document.body.style.overflow = "";
@@ -177,7 +149,7 @@ const Navbar = () => {
     }, [menuOpen]);
 
     /* =====================================================
-       CLOSE MENU WHEN SCREEN BECOMES DESKTOP
+       DESKTOP RESIZE
     ===================================================== */
 
     useEffect(() => {
@@ -187,16 +159,10 @@ const Navbar = () => {
             }
         };
 
-        window.addEventListener(
-            "resize",
-            handleResize
-        );
+        window.addEventListener("resize", handleResize);
 
         return () => {
-            window.removeEventListener(
-                "resize",
-                handleResize
-            );
+            window.removeEventListener("resize", handleResize);
         };
     }, []);
 
@@ -205,15 +171,26 @@ const Navbar = () => {
     ===================================================== */
 
     const toggleTheme = () => {
-        setTheme((currentTheme) =>
-            currentTheme === "light"
-                ? "dark"
-                : "light"
+        setTheme((current) =>
+            current === "light" ? "dark" : "light"
         );
     };
 
     const closeMenu = () => {
         setMenuOpen(false);
+    };
+
+    const handleNavClick = (href) => {
+        closeMenu();
+
+        const section = document.querySelector(href);
+
+        if (!section) return;
+
+        section.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
     };
 
     return (
@@ -268,11 +245,10 @@ const Navbar = () => {
                             ? `
                                     border
                                     border-border/70
-                                    bg-background/70
-                                    shadow-[0_12px_45px_rgba(0,0,0,0.06)]
+                                    bg-background/75
+                                    shadow-[0_12px_45px_rgba(0,0,0,0.07)]
                                     backdrop-blur-2xl
-
-                                    dark:shadow-[0_12px_45px_rgba(0,0,0,0.25)]
+                                    dark:shadow-[0_12px_45px_rgba(0,0,0,0.28)]
                                 `
                             : `
                                     border
@@ -288,7 +264,10 @@ const Navbar = () => {
 
                     <a
                         href="#home"
-                        onClick={closeMenu}
+                        onClick={(event) => {
+                            event.preventDefault();
+                            handleNavClick("#home");
+                        }}
                         className="
                             group
                             relative
@@ -303,16 +282,13 @@ const Navbar = () => {
                         AMIT
                         <span
                             className="
-                                text-muted
+                                text-accent
                                 transition-colors
                                 duration-300
-                                group-hover:text-accent
                             "
                         >
                             .
                         </span>
-
-                        {/* Logo accent line */}
 
                         <span
                             className="
@@ -330,7 +306,7 @@ const Navbar = () => {
                     </a>
 
                     {/* =================================================
-                        DESKTOP NAVIGATION
+                        DESKTOP NAV
                     ================================================= */}
 
                     <div
@@ -342,8 +318,6 @@ const Navbar = () => {
                             lg:gap-7
                         "
                     >
-                        {/* Links */}
-
                         <div
                             className="
                                 flex
@@ -354,13 +328,16 @@ const Navbar = () => {
                         >
                             {navItems.map((item) => {
                                 const isActive =
-                                    activeSection ===
-                                    item.href;
+                                    activeSection === item.href;
 
                                 return (
                                     <a
                                         key={item.label}
                                         href={item.href}
+                                        onClick={(event) => {
+                                            event.preventDefault();
+                                            handleNavClick(item.href);
+                                        }}
                                         className="
                                             group
                                             relative
@@ -374,9 +351,15 @@ const Navbar = () => {
                                             lg:text-sm
                                         "
                                     >
-                                        {item.label}
-
-                                        {/* Hover / active line */}
+                                        <span
+                                            className={
+                                                isActive
+                                                    ? "text-accent"
+                                                    : ""
+                                            }
+                                        >
+                                            {item.label}
+                                        </span>
 
                                         <span
                                             className={`
@@ -384,10 +367,9 @@ const Navbar = () => {
                                                 bottom-0
                                                 left-0
                                                 h-px
-                                                bg-foreground
+                                                bg-accent
                                                 transition-all
                                                 duration-300
-
                                                 ${isActive
                                                     ? "w-full"
                                                     : "w-0 group-hover:w-full"
@@ -409,14 +391,10 @@ const Navbar = () => {
                             "
                         />
 
-                        {/* Theme */}
-
                         <ThemeToggle
                             theme={theme}
                             onClick={toggleTheme}
                         />
-
-                        {/* CTA */}
 
                         <TalkButton />
                     </div>
@@ -440,14 +418,9 @@ const Navbar = () => {
 
                         <motion.button
                             type="button"
-                            whileTap={{
-                                scale: 0.9,
-                            }}
+                            whileTap={{ scale: 0.9 }}
                             onClick={() =>
-                                setMenuOpen(
-                                    (previous) =>
-                                        !previous
-                                )
+                                setMenuOpen((current) => !current)
                             }
                             aria-label={
                                 menuOpen
@@ -464,14 +437,14 @@ const Navbar = () => {
                                 rounded-full
                                 border
                                 border-border
-                                bg-surface/70
+                                bg-surface/80
                                 text-foreground
                                 shadow-sm
                                 backdrop-blur-xl
                                 transition-all
                                 duration-300
-                                hover:border-foreground/20
-                                hover:bg-surface
+                                hover:border-accent/40
+                                hover:text-accent
                             "
                         >
                             <AnimatePresence
@@ -496,9 +469,6 @@ const Navbar = () => {
                                             rotate: 90,
                                             scale: 0.6,
                                         }}
-                                        transition={{
-                                            duration: 0.2,
-                                        }}
                                     >
                                         <FiX size={18} />
                                     </motion.span>
@@ -520,9 +490,6 @@ const Navbar = () => {
                                             rotate: -90,
                                             scale: 0.6,
                                         }}
-                                        transition={{
-                                            duration: 0.2,
-                                        }}
                                     >
                                         <FiMenu size={18} />
                                     </motion.span>
@@ -534,24 +501,16 @@ const Navbar = () => {
             </motion.header>
 
             {/* =================================================
-                MOBILE BACKDROP + MENU
+                MOBILE MENU
             ================================================= */}
 
             <AnimatePresence>
                 {menuOpen && (
                     <>
-                        {/* Backdrop */}
-
                         <motion.div
-                            initial={{
-                                opacity: 0,
-                            }}
-                            animate={{
-                                opacity: 1,
-                            }}
-                            exit={{
-                                opacity: 0,
-                            }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
                             onClick={closeMenu}
                             className="
                                 fixed
@@ -559,12 +518,10 @@ const Navbar = () => {
                                 z-40
                                 bg-black/10
                                 backdrop-blur-[3px]
-                                dark:bg-black/35
+                                dark:bg-black/40
                                 md:hidden
                             "
                         />
-
-                        {/* Menu */}
 
                         <motion.div
                             initial={{
@@ -584,12 +541,7 @@ const Navbar = () => {
                             }}
                             transition={{
                                 duration: 0.3,
-                                ease: [
-                                    0.22,
-                                    1,
-                                    0.36,
-                                    1,
-                                ],
+                                ease: [0.22, 1, 0.36, 1],
                             }}
                             className="
                                 fixed
@@ -600,7 +552,7 @@ const Navbar = () => {
                                 rounded-[1.75rem]
                                 border
                                 border-border/70
-                                bg-surface/90
+                                bg-surface/95
                                 p-4
                                 shadow-2xl
                                 backdrop-blur-2xl
@@ -609,8 +561,6 @@ const Navbar = () => {
                                 md:hidden
                             "
                         >
-                            {/* Menu top */}
-
                             <div
                                 className="
                                     flex
@@ -633,118 +583,77 @@ const Navbar = () => {
                                     Navigation
                                 </span>
 
-                                <span
-                                    className="
-                                        text-[10px]
-                                        font-medium
-                                        text-muted
-                                    "
-                                >
+                                <span className="text-[10px] font-medium text-accent">
                                     AMIT.
                                 </span>
                             </div>
 
-                            {/* Links */}
-
                             <div className="mt-1">
-                                {navItems.map(
-                                    (
-                                        item,
-                                        index
-                                    ) => {
-                                        const isActive =
-                                            activeSection ===
-                                            item.href;
+                                {navItems.map((item, index) => {
+                                    const isActive =
+                                        activeSection === item.href;
 
-                                        return (
-                                            <motion.a
-                                                key={
-                                                    item.label
+                                    return (
+                                        <motion.a
+                                            key={item.label}
+                                            href={item.href}
+                                            onClick={(event) => {
+                                                event.preventDefault();
+                                                handleNavClick(item.href);
+                                            }}
+                                            initial={{
+                                                opacity: 0,
+                                                x: -15,
+                                            }}
+                                            animate={{
+                                                opacity: 1,
+                                                x: 0,
+                                            }}
+                                            transition={{
+                                                delay: index * 0.06,
+                                            }}
+                                            className="
+                                                group
+                                                flex
+                                                items-center
+                                                justify-between
+                                                border-b
+                                                border-border/70
+                                                py-4
+                                                text-xl
+                                                font-medium
+                                                last:border-b-0
+                                                sm:text-2xl
+                                            "
+                                        >
+                                            <span
+                                                className={
+                                                    isActive
+                                                        ? "text-accent"
+                                                        : "text-foreground"
                                                 }
-                                                href={
-                                                    item.href
-                                                }
-                                                onClick={
-                                                    closeMenu
-                                                }
-                                                initial={{
-                                                    opacity: 0,
-                                                    x: -15,
-                                                }}
-                                                animate={{
-                                                    opacity: 1,
-                                                    x: 0,
-                                                }}
-                                                transition={{
-                                                    delay:
-                                                        index *
-                                                        0.06,
-                                                }}
-                                                className="
-                                                    group
-                                                    flex
-                                                    items-center
-                                                    justify-between
-                                                    border-b
-                                                    border-border/70
-                                                    py-4
-                                                    text-xl
-                                                    font-medium
-                                                    last:border-b-0
-                                                    sm:text-2xl
-                                                "
                                             >
-                                                <span
-                                                    className={`
-                                                        transition-colors
-                                                        duration-300
+                                                {item.label}
+                                            </span>
 
-                                                        ${isActive
-                                                            ? "text-accent"
-                                                            : "text-foreground"
-                                                        }
-                                                    `}
-                                                >
-                                                    {
-                                                        item.label
-                                                    }
-                                                </span>
-
-                                                <motion.span
-                                                    initial={{
-                                                        opacity: 0,
-                                                        x: -4,
-                                                        y: 4,
-                                                    }}
-                                                    whileHover={{
-                                                        opacity: 1,
-                                                        x: 2,
-                                                        y: -2,
-                                                    }}
-                                                    className="
-                                                        text-muted
-                                                        transition-opacity
-                                                        duration-300
-                                                    "
-                                                >
-                                                    <FiArrowUpRight
-                                                        size={
-                                                            18
-                                                        }
-                                                    />
-                                                </motion.span>
-                                            </motion.a>
-                                        );
-                                    }
-                                )}
+                                            <FiArrowUpRight
+                                                size={18}
+                                                className="
+                                                    text-muted
+                                                    transition-all
+                                                    duration-300
+                                                    group-hover:-translate-y-1
+                                                    group-hover:translate-x-1
+                                                    group-hover:text-accent
+                                                "
+                                            />
+                                        </motion.a>
+                                    );
+                                })}
                             </div>
 
-                            {/* Mobile CTA */}
-
                             <div className="mt-4">
-                                <TalkButton
-                                    mobile
-                                />
+                                <TalkButton mobile />
                             </div>
                         </motion.div>
                     </>
@@ -758,22 +667,15 @@ const Navbar = () => {
    THEME TOGGLE
 ========================================================= */
 
-const ThemeToggle = ({
-    theme,
-    onClick,
-}) => {
+const ThemeToggle = ({ theme, onClick }) => {
     const isDark = theme === "dark";
 
     return (
         <motion.button
             type="button"
             onClick={onClick}
-            whileHover={{
-                scale: 1.06,
-            }}
-            whileTap={{
-                scale: 0.9,
-            }}
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.9 }}
             aria-label={
                 isDark
                     ? "Switch to light mode"
@@ -791,25 +693,20 @@ const ThemeToggle = ({
                 rounded-full
                 border
                 border-border
-                bg-surface/75
+                bg-surface/80
                 text-foreground
                 shadow-sm
                 backdrop-blur-xl
                 transition-all
                 duration-300
-                hover:border-foreground/20
-                hover:bg-surface
+                hover:border-accent/40
+                hover:text-accent
             "
         >
-            {/* Ambient accent */}
-
             <motion.span
                 animate={{
                     scale: isDark ? 1.2 : 0.8,
-                    opacity: isDark ? 0.15 : 0.08,
-                }}
-                transition={{
-                    duration: 0.4,
+                    opacity: isDark ? 0.16 : 0.08,
                 }}
                 className="
                     absolute
@@ -842,9 +739,6 @@ const ThemeToggle = ({
                             rotate: 90,
                             scale: 0.5,
                         }}
-                        transition={{
-                            duration: 0.25,
-                        }}
                         className="relative z-10"
                     >
                         <FiSun size={17} />
@@ -867,9 +761,6 @@ const ThemeToggle = ({
                             rotate: -90,
                             scale: 0.5,
                         }}
-                        transition={{
-                            duration: 0.25,
-                        }}
                         className="relative z-10"
                     >
                         <FiMoon size={17} />
@@ -881,65 +772,66 @@ const ThemeToggle = ({
 };
 
 /* =========================================================
-   LET'S TALK BUTTON
+   LET'S TALK
 ========================================================= */
 
 const TalkButton = ({ mobile = false }) => {
     return (
         <motion.a
             href="#contact"
-            whileHover="hover"
-            whileTap={{ scale: 0.96 }}
+            onClick={(event) => {
+                event.preventDefault();
+
+                const contact = document.querySelector("#contact");
+
+                if (contact) {
+                    contact.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                    });
+                }
+            }}
+            whileHover={{
+                scale: 1.03,
+            }}
+            whileTap={{
+                scale: 0.96,
+            }}
             className={`
                 group
                 relative
-                isolate
                 flex
                 items-center
                 justify-between
                 overflow-hidden
                 rounded-full
                 border
-                border-violet-400/30
+                border-violet-400/40
                 bg-gradient-to-r
-                from-[#6d5dfc]
-                via-[#7c6cff]
-                to-[#5b4de8]
+                from-violet-600
+                via-purple-600
+                to-indigo-600
                 px-5
                 py-2.5
                 text-sm
                 font-semibold
                 text-white
-                shadow-[0_8px_30px_rgba(109,93,252,0.22)]
+                shadow-[0_8px_30px_rgba(124,58,237,0.25)]
                 transition-all
-                duration-500
-
-                hover:border-violet-300/50
-                hover:shadow-[0_12px_40px_rgba(109,93,252,0.38)]
-
-                dark:border-violet-400/30
-                dark:from-[#7c6cff]
-                dark:via-[#8b7cff]
-                dark:to-[#6655ed]
-                dark:text-white
-                dark:shadow-[0_8px_35px_rgba(139,124,255,0.18)]
-
-                dark:hover:border-violet-300/60
-                dark:hover:shadow-[0_12px_45px_rgba(139,124,255,0.35)]
+                duration-300
+                hover:shadow-[0_12px_40px_rgba(124,58,237,0.4)]
+                dark:from-violet-500
+                dark:via-purple-500
+                dark:to-indigo-500
 
                 ${mobile ? "w-full py-3.5" : "shrink-0"}
             `}
         >
-            {/* Animated shine */}
+            {/* Shine */}
+
             <motion.span
-                variants={{
-                    hover: {
-                        x: "180%",
-                    },
-                }}
-                initial={{
-                    x: "-130%",
-                }}
+                initial={{ x: "-130%" }}
+                whileHover={{ x: "180%" }}
                 transition={{
                     duration: 0.75,
                     ease: "easeInOut",
@@ -948,7 +840,6 @@ const TalkButton = ({ mobile = false }) => {
                     absolute
                     inset-y-0
                     left-[-45%]
-                    z-[-1]
                     w-1/2
                     skew-x-[-20deg]
                     bg-gradient-to-r
@@ -958,44 +849,17 @@ const TalkButton = ({ mobile = false }) => {
                 "
             />
 
-            {/* Purple glow */}
-            <span
-                className="
-                    absolute
-                    -right-5
-                    -top-5
-                    h-14
-                    w-14
-                    rounded-full
-                    bg-white/20
-                    blur-2xl
-                    transition-transform
-                    duration-500
-                    group-hover:scale-[1.8]
-                "
-            />
-
             <span className="relative z-10">
-                Let's Talk
+                Let&apos;s Talk
             </span>
 
             <motion.span
-                variants={{
-                    hover: {
-                        x: 4,
-                        y: -4,
-                        rotate: 5,
-                    },
+                whileHover={{
+                    x: 4,
+                    y: -4,
+                    rotate: 5,
                 }}
-                transition={{
-                    duration: 0.3,
-                    ease: "easeOut",
-                }}
-                className="
-                    relative
-                    z-10
-                    ml-3
-                "
+                className="relative z-10 ml-3"
             >
                 <FiArrowUpRight size={15} />
             </motion.span>
